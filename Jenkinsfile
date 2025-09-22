@@ -12,7 +12,10 @@ pipeline {
       steps {
         checkout scm
         script {
-          env.GIT_COMMIT_SHORT = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+          env.GIT_COMMIT_SHORT = sh(
+            returnStdout: true,
+            script: "git rev-parse --short HEAD"
+          ).trim()
         }
       }
     }
@@ -67,8 +70,11 @@ pipeline {
               -e 's|GIT_COMMIT_SHORT|${GIT_COMMIT_SHORT}|g' \
               k8s/deployment.yaml | kubectl apply -f -
           kubectl rollout status deploy/hello-deploy --timeout=90s
-          echo "🔗 App URL:" 
-          minikube service hello-svc --url
+
+          # Compute URL without minikube CLI
+          NODE_PORT=$(kubectl get svc hello-svc -o jsonpath='{.spec.ports[0].nodePort}')
+          NODE_IP=$(kubectl get node -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}')
+          echo "🔗 Application should be available at: http://${NODE_IP}:${NODE_PORT}"
         """
       }
     }
