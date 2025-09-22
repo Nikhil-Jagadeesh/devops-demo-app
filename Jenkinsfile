@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     DOCKERHUB_CRED = credentials('dockerhub-creds')  // Jenkins credentials ID
-    DOCKERHUB_NS   = 'AlphaCoder2019'                // <-- change to your Docker Hub username
+    DOCKERHUB_NS   = 'alphacoder2019'                // <-- change to your Docker Hub username
     IMAGE_NAME     = "${DOCKERHUB_NS}/hello-minikube"
   }
   triggers { githubPush() }
