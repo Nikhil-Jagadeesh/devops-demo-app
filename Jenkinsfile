@@ -1,8 +1,8 @@
 pipeline {
   agent any
   environment {
-    DOCKERHUB_CRED = credentials('dockerhub-creds')  // set in Jenkins
-    DOCKERHUB_NS   = 'DOCKER_HUB_USERNAME'           // change me
+    DOCKERHUB_CRED = credentials('dockerhub-creds')  // Jenkins credentials ID
+    DOCKERHUB_NS   = 'YOUR_DOCKER_ID'                // <-- change to your Docker Hub username
     IMAGE_NAME     = "${DOCKERHUB_NS}/hello-minikube"
   }
   triggers { githubPush() }
@@ -18,10 +18,18 @@ pipeline {
     }
 
     stage('SonarQube Analysis') {
-  steps {
-    withSonarQubeEnv('MySonar') {
-      tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-      sh "sonar-scanner"
+      steps {
+        withSonarQubeEnv('MySonar') {
+          script {
+            def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+            sh """
+              "${scannerHome}/bin/sonar-scanner" \
+                -Dsonar.projectKey=hello-minikube \
+                -Dsonar.sources=. \
+                -Dsonar.host.url=${SONAR_HOST_URL} \
+                -Dsonar.login=${SONAR_AUTH_TOKEN}
+            """
+          }
         }
       }
     }
