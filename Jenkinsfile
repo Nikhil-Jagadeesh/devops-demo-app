@@ -18,16 +18,10 @@ pipeline {
     }
 
     stage('SonarQube Analysis') {
-      steps {
-        withSonarQubeEnv('MySonar') {
-          sh """
-            if ! command -v sonar-scanner >/dev/null 2>&1; then
-              curl -sSLo ss.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-5.0.1.3006-linux.zip
-              unzip -q -o ss.zip
-              export PATH=\$PWD/sonar-scanner-*/bin:\$PATH
-            fi
-            sonar-scanner
-          """
+  steps {
+    withSonarQubeEnv('MySonar') {
+      tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+      sh "sonar-scanner"
         }
       }
     }
