@@ -64,18 +64,22 @@ pipeline {
 
     stage('Deploy to Minikube') {
       steps {
-        sh """
+        sh '''
           kubectl config use-context minikube
-          sed -e 's|DOCKER_HUB_USERNAME|${DOCKERHUB_NS}|g' \
-              -e 's|GIT_COMMIT_SHORT|${GIT_COMMIT_SHORT}|g' \
+
+          # Replace placeholders in deployment.yaml and apply
+          sed -e "s|DOCKER_HUB_USERNAME|${DOCKERHUB_NS}|g" \
+              -e "s|GIT_COMMIT_SHORT|${GIT_COMMIT_SHORT}|g" \
               k8s/deployment.yaml | kubectl apply -f -
+
+          # Wait until rollout is complete
           kubectl rollout status deploy/hello-deploy --timeout=90s
 
-          # Compute URL without minikube CLI
+          # Compute URL without minikube binary
           NODE_PORT=$(kubectl get svc hello-svc -o jsonpath='{.spec.ports[0].nodePort}')
-          NODE_IP=$(kubectl get node -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}')
-          echo "🔗 Application should be available at: http://${NODE_IP}:${NODE_PORT}"
-        """
+          NODE_IP=$(kubectl get node -o jsonpath='{.items[0].status.addresses[?(@.type==\"InternalIP\")].address}')
+          echo "🔗 Application should be available at: http://$NODE_IP:$NODE_PORT"
+        '''
       }
     }
   }
