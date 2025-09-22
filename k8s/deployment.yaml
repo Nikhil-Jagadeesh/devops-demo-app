@@ -23,7 +23,7 @@ kind: Service
 metadata:
   name: hello-svc
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: hello-app
   ports:
