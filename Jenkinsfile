@@ -1,8 +1,8 @@
 pipeline {
   agent any
   environment {
-    DOCKERHUB_CRED = credentials('dockerhub-creds')  // Jenkins credentials ID
-    DOCKERHUB_NS   = 'alphacoder2019'                // <-- change to your Docker Hub username
+    DOCKERHUB_CRED = credentials('dockerhub-creds')   // Jenkins creds ID
+    DOCKERHUB_NS   = 'alphacoder2019'                 // your Docker Hub username (lowercase)
     IMAGE_NAME     = "${DOCKERHUB_NS}/hello-minikube"
   }
   triggers { githubPush() }
@@ -50,12 +50,12 @@ pipeline {
 
     stage('Push Image') {
       steps {
-        sh """
-          echo '${DOCKERHUB_CRED_PSW}' | docker login -u '${DOCKERHUB_CRED_USR}' --password-stdin
-          docker tag ${IMAGE_NAME}:${env.GIT_COMMIT_SHORT} ${IMAGE_NAME}:latest
-          docker push ${IMAGE_NAME}:${env.GIT_COMMIT_SHORT}
+        sh '''
+          echo "$DOCKERHUB_CRED_PSW" | docker login -u "$DOCKERHUB_CRED_USR" --password-stdin
+          docker tag ${IMAGE_NAME}:${GIT_COMMIT_SHORT} ${IMAGE_NAME}:latest
+          docker push ${IMAGE_NAME}:${GIT_COMMIT_SHORT}
           docker push ${IMAGE_NAME}:latest
-        """
+        '''
       }
     }
 
@@ -63,10 +63,12 @@ pipeline {
       steps {
         sh """
           kubectl config use-context minikube
-          sed -e 's/DOCKER_HUB_USERNAME/${DOCKERHUB_NS}/g' \
-              -e 's/\\${GIT_COMMIT_SHORT}/${GIT_COMMIT_SHORT}/g' \
+          sed -e 's|DOCKER_HUB_USERNAME|${DOCKERHUB_NS}|g' \
+              -e 's|GIT_COMMIT_SHORT|${GIT_COMMIT_SHORT}|g' \
               k8s/deployment.yaml | kubectl apply -f -
           kubectl rollout status deploy/hello-deploy --timeout=90s
+          echo "🔗 App URL:" 
+          minikube service hello-svc --url
         """
       }
     }
