@@ -1,0 +1,4 @@
+# start cluster (2 CPU, ~3.5 GiB RAM)
+minikube start --driver=docker --cpus=2 --memory=3500mb
+kubectl config current-context    # should be "minikube"
+kubectl get nodes                 # node should be Ready
