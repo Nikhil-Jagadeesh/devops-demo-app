@@ -51,6 +51,8 @@ In your GitHub repo → Settings → Webhooks → Add webhook
 Payload URL: http://<EC2_PUBLIC_IP>:8080/github-webhook/
 Content type: application/json
 Event: Just the push event.
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/585ceaf4-6ff0-452d-8fbc-1c44aeddcb48" />
+
 <img width="1920" height="1080" alt="Screenshot (811)" src="https://github.com/user-attachments/assets/8b570bc9-7e7d-4518-9f7d-f438bd42e1dd" />
 
 <img width="1920" height="1080" alt="Screenshot (814)" src="https://github.com/user-attachments/assets/0541b6e8-1f82-4ffd-9e1a-48450e59ac3f" />
