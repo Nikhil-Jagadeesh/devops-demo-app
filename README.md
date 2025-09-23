@@ -15,6 +15,7 @@ Security Group (EC2 inbound):
 9000 (SonarQube)
 30000–32767 (K8s NodePort range)
 8081 (public app URL – used by the proxy)
+<img width="1920" height="1080" alt="Screenshot (807)" src="https://github.com/user-attachments/assets/b07ff63f-a9bc-44a1-bf56-ef8aa8c417bb" />
 
 Instance: Ubuntu 24.04, e.g. m7i-flex.large (2 vCPU, 8 GiB RAM).
 
@@ -50,6 +51,11 @@ In your GitHub repo → Settings → Webhooks → Add webhook
 Payload URL: http://<EC2_PUBLIC_IP>:8080/github-webhook/
 Content type: application/json
 Event: Just the push event.
+<img width="1920" height="1080" alt="Screenshot (811)" src="https://github.com/user-attachments/assets/8b570bc9-7e7d-4518-9f7d-f438bd42e1dd" />
 
 <img width="1920" height="1080" alt="Screenshot (814)" src="https://github.com/user-attachments/assets/0541b6e8-1f82-4ffd-9e1a-48450e59ac3f" />
+<img width="1920" height="1080" alt="Screenshot (812)" src="https://github.com/user-attachments/assets/fefdc0e7-8aa9-4c49-95bb-9a631586f8c6" />
 
+<img width="1920" height="1080" alt="Screenshot (813)" src="https://github.com/user-attachments/assets/888225b3-74a7-4df2-87fd-6a5d1fb0b36e" />
+
+<img width="1920" height="1080" alt="Screenshot (805)" src="https://github.com/user-attachments/assets/178bf251-dbb1-48f6-a86b-42023bde76db" />
