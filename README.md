@@ -51,4 +51,5 @@ Payload URL: http://<EC2_PUBLIC_IP>:8080/github-webhook/
 Content type: application/json
 Event: Just the push event.
 
+<img width="1920" height="1080" alt="Screenshot (814)" src="https://github.com/user-attachments/assets/0541b6e8-1f82-4ffd-9e1a-48450e59ac3f" />
 
